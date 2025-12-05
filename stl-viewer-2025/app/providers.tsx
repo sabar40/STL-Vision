@@ -1,15 +1,13 @@
-// app/providers.tsx
 "use client";
 
-import { HeroUIProvider } from "@heroui/react";
+import * as React from "react";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <HeroUIProvider>
-      {/* On force le mode dark pour que ça colle à la 3D */}
-      <main className="dark text-foreground bg-background h-full">
-        {children}
-      </main>
-    </HeroUIProvider>
+    // J'ai retiré <HeroUIProvider> qui causait l'erreur.
+    // On garde <main> pour conserver le fond sombre (dark mode).
+    <main className="dark text-foreground bg-background h-full">
+      {children}
+    </main>
   );
 }
