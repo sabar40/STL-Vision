@@ -1,67 +1,58 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --background: #050505;
+  --foreground: #ededed;
+  --font-inter: 'Inter', sans-serif;
+  --font-rajdhani: 'Rajdhani', sans-serif;
 }
 
 body {
-  background: var(--background);
+  background-color: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-inter);
 }
 
-/* --- LOGIQUE D'IMPRESSION (PDF PROPRE) --- */
+/* Titres en police Tech */
+h1, h2, h3, .font-tech, .font-mono {
+  font-family: var(--font-rajdhani) !important;
+}
+
+/* --- FOND BLUEPRINT (GRILLE) --- */
+.bg-grid-pattern {
+  background-size: 40px 40px;
+  background-image: linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                    linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
+}
+
+/* Scrollbar invisible mais fonctionnelle */
+.scrollbar-hide::-webkit-scrollbar {
+    display: none;
+}
+.scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+/* --- IMPRESSION (PDF PROPRE) --- */
 @media print {
-  /* 1. On cache TOUT le contenu de la page par défaut */
-  body * {
-    visibility: hidden;
-  }
-
-  /* 2. On rend visible UNIQUEMENT l'élément avec l'ID "fiche-technique" (et ses enfants) */
-  #fiche-technique, #fiche-technique * {
-    visibility: visible;
-  }
-
-  /* 3. On repositionne la fiche tout en haut de la feuille A4 */
+  body * { visibility: hidden; }
+  #fiche-technique, #fiche-technique * { visibility: visible; }
+  
   #fiche-technique {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    margin: 0;
-    padding: 40px; /* Marges confortables pour le papier */
-    background-color: white !important; /* Fond blanc forcé */
-    color: black !important; /* Texte noir forcé */
-    border: none !important; /* On enlève les bordures brillantes */
-    box-shadow: none !important; /* On enlève les ombres 3D */
+    position: absolute; left: 0; top: 0; width: 100%; margin: 0; padding: 40px;
+    background-color: white !important; color: black !important;
+    border: none !important; box-shadow: none !important;
   }
 
-  /* 4. On force les couleurs de texte pour l'impression (Noir & Blanc) */
-  /* Tous les textes clairs deviennent noirs */
-  .text-white, .text-slate-300, .text-slate-400, .text-slate-500, .text-blue-300 {
-     color: black !important;
-  }
+  .text-white, .text-slate-300, .text-slate-400, .text-slate-500, .text-blue-300 { color: black !important; }
+  .text-green-400 { color: #15803d !important; }
   
-  /* Le vert fluo devient un vert foncé lisible sur papier */
-  .text-green-400 {
-     color: #15803d !important; 
-  }
-
-  /* 5. On cache les éléments interactifs inutiles sur un PDF */
-  button, input, select {
-    display: none !important;
-  }
+  /* Masquer les éléments d'interface */
+  button, input, select, label { display: none !important; }
   
-  /* On cache le label du selecteur puisqu'on affiche la valeur statique à la place */
-  label {
-    display: none !important;
-  }
+  /* Afficher les textes cachés d'impression */
+  .print\:block { display: block !important; }
+  .print\:hidden { display: none !important; }
 }

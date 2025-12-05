@@ -34,60 +34,88 @@ export default function Home() {
   };
 
   return (
-    // LAYOUT RESPONSIVE : Flex column sur mobile, Block sur desktop
-    <main className="min-h-screen w-full bg-gradient-to-br from-slate-900 to-black text-white flex flex-col md:block overflow-x-hidden font-sans">
+    // LAYOUT GLOBAL : Flex Column sur mobile (empilement), Block sur Desktop
+    <main className="min-h-screen w-full bg-black text-white flex flex-col md:block overflow-x-hidden relative selection:bg-green-500/30">
+      
+      {/* FOND DE GRILLE (Visible partout) */}
+      <div className="absolute inset-0 bg-grid-pattern opacity-20 pointer-events-none z-0"></div>
       
       {/* HEADER */}
-      <div className="p-4 md:absolute md:top-0 md:left-0 md:p-6 md:z-20 pointer-events-none bg-slate-900/50 md:bg-transparent">
-        <h1 className="text-2xl md:text-4xl font-black italic tracking-tighter bg-clip-text text-transparent bg-gradient-to-r from-green-400 to-blue-500">
-          NIRD VISION <span className="text-white text-sm md:text-base font-normal not-italic opacity-50">v2.0</span>
+      {/* Mobile: Padding normal. Desktop: Absolu en haut à gauche */}
+      <div className="p-6 md:absolute md:top-0 md:left-0 md:z-30 pointer-events-none bg-gradient-to-b from-black/80 to-transparent md:bg-none z-20">
+        <h1 className="text-3xl md:text-5xl font-bold italic tracking-tighter text-transparent bg-clip-text bg-gradient-to-r from-green-400 via-emerald-400 to-blue-500 drop-shadow-[0_0_15px_rgba(34,197,94,0.3)] animate-in slide-in-from-left duration-700">
+          NIRD VISION <span className="text-white/40 text-sm md:text-lg font-normal not-italic ml-2 font-mono">v2.0</span>
         </h1>
-        <p className="text-slate-400 text-xs md:text-sm">Outil d'Analyse Éco-Responsable</p>
+        <div className="flex items-center gap-2 mt-2 animate-in fade-in duration-1000 delay-300">
+            <div className="h-[1px] w-8 md:w-12 bg-green-500/50"></div>
+            <p className="text-slate-400 text-[10px] md:text-xs font-medium tracking-widest uppercase">Analyseur de Réparabilité &bull; Utopie3D</p>
+        </div>
       </div>
 
       {/* --- UI DROITE : CONTRÔLES --- */}
-      {/* Sur mobile : ordre 2, relatif. Sur Desktop : absolute top-right */}
+      {/* Mobile: Ordre 3 (après la 3D), Relatif. Desktop: Absolu à droite */}
       {fileUrl && (
-        <div className="order-2 p-4 md:absolute md:top-6 md:right-6 md:z-20 md:p-0 flex justify-center">
-          <div className="w-full max-w-sm md:w-64 bg-slate-900/80 backdrop-blur-md border border-white/10 p-4 rounded-xl shadow-xl">
+        <div className="order-3 p-4 md:absolute md:top-6 md:right-6 md:z-30 md:p-0 flex justify-center animate-in slide-in-from-right duration-700 z-20">
+          <div className="w-full max-w-sm md:w-64 bg-slate-900/70 backdrop-blur-xl border border-white/10 p-5 rounded-2xl shadow-2xl transition-all hover:border-blue-500/30 group">
             
             {/* Rendu */}
-            <div className="mb-4">
-              <h3 className="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-2">Mode</h3>
-              <div className="grid grid-cols-3 gap-1">
+            <div className="mb-6">
+              <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 group-hover:text-blue-400 transition-colors">Mode de Vue</h3>
+              <div className="grid grid-cols-3 gap-1 bg-black/20 p-1 rounded-lg">
                 {(['standard', 'wireframe', 'glass'] as const).map((type) => (
-                  <button key={type} onClick={() => setMaterialType(type)} className={`py-1 px-2 text-[10px] capitalize rounded border ${materialType === type ? 'bg-blue-600 border-blue-500' : 'border-white/10 hover:bg-white/5'}`}>{type}</button>
+                  <button 
+                    key={type} 
+                    onClick={() => setMaterialType(type)} 
+                    className={`py-1.5 px-1 text-[9px] font-bold uppercase rounded-md transition-all truncate ${materialType === type ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/20' : 'text-slate-400 hover:text-white hover:bg-white/5'}`}
+                  >
+                    {type}
+                  </button>
                 ))}
               </div>
             </div>
 
             {/* Slicer */}
-            <div className="mb-4">
-               <div className="flex justify-between mb-1">
-                 <h3 className="text-[10px] font-bold text-slate-400 uppercase">Slicer</h3>
-                 <span className="text-[10px] text-blue-400">{sliceValue}%</span>
+            <div className="mb-6">
+               <div className="flex justify-between mb-2 items-end">
+                 <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest group-hover:text-blue-400 transition-colors">Inspection (Slicer)</h3>
+                 <span className="text-sm font-tech font-bold text-blue-400">{sliceValue}%</span>
                </div>
-               <input type="range" min="0" max="100" value={sliceValue} onChange={(e) => setSliceValue(parseInt(e.target.value))} className="w-full h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500"/>
+               <div className="relative h-4 flex items-center">
+                  <input type="range" min="0" max="100" value={sliceValue} onChange={(e) => setSliceValue(parseInt(e.target.value))} 
+                    className="absolute w-full h-1.5 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-blue-500 hover:accent-blue-400 z-10"
+                  />
+                  <div className="absolute top-1/2 -translate-y-1/2 w-full h-0.5 bg-blue-500/20 rounded-full blur-[1px]"></div>
+               </div>
             </div>
 
             {/* Couleurs */}
-            <div className="mb-4">
-              <h3 className="text-[10px] font-bold text-slate-400 uppercase mb-2">Couleur</h3>
-              <div className="flex gap-2 justify-center">
+            <div className="mb-6">
+              <h3 className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-3 group-hover:text-blue-400 transition-colors">Filament</h3>
+              <div className="flex gap-3 justify-center">
                 {COLORS.map((c) => (
-                  <button key={c.name} onClick={() => setColor(c.value)} className={`w-6 h-6 rounded-full border ${color === c.value ? 'border-white scale-110' : 'border-transparent'}`} style={{ backgroundColor: c.value }} />
+                  <button 
+                    key={c.name} 
+                    onClick={() => setColor(c.value)} 
+                    className={`w-7 h-7 rounded-full border-2 transition-transform hover:scale-110 ${color === c.value ? 'border-white scale-110 shadow-[0_0_10px_currentColor]' : 'border-transparent opacity-70 hover:opacity-100'}`} 
+                    style={{ backgroundColor: c.value, color: c.value }} 
+                    title={c.name}
+                  />
                 ))}
               </div>
             </div>
 
-            {/* Boutons */}
-            <div className="flex items-center justify-between gap-2">
-                 <label className="flex items-center gap-2 cursor-pointer bg-white/5 p-2 rounded text-[10px]">
-                    <input type="checkbox" checked={autoRotate} onChange={(e) => setAutoRotate(e.target.checked)} />
-                    Rotation
+            {/* Actions */}
+            <div className="space-y-3">
+                 <label className="flex items-center justify-between cursor-pointer bg-white/5 p-3 rounded-xl border border-white/5 hover:bg-white/10 transition-colors group/check">
+                    <span className="text-[10px] font-bold uppercase tracking-wide text-slate-400 group-hover/check:text-white transition-colors">Rotation Auto</span>
+                    <div className={`w-8 h-4 rounded-full relative transition-colors ${autoRotate ? 'bg-green-500' : 'bg-slate-700'}`}>
+                        <div className={`absolute top-1 w-2 h-2 rounded-full bg-white transition-all shadow-sm ${autoRotate ? 'left-5' : 'left-1'}`} />
+                    </div>
+                    <input type="checkbox" checked={autoRotate} onChange={(e) => setAutoRotate(e.target.checked)} className="hidden"/>
                  </label>
-                 <label className="flex-1 text-center py-2 bg-blue-600 hover:bg-blue-500 rounded cursor-pointer text-[10px] font-bold">
-                    Nouveau Fichier
+
+                 <label className="flex w-full items-center justify-center gap-2 py-3 bg-blue-600 hover:bg-blue-500 text-white rounded-xl cursor-pointer text-[10px] font-bold uppercase tracking-widest transition-all transform active:scale-95 shadow-lg shadow-blue-900/20">
+                    <span>📂</span> Charger un autre STL
                     <input type="file" accept=".stl" onChange={handleFileUpload} className="hidden" />
                  </label>
             </div>
@@ -96,30 +124,39 @@ export default function Home() {
       )}
 
       {/* --- UI GAUCHE : ÉCO-CALCULATEUR --- */}
-      {/* Sur mobile : ordre 3 (en bas). Sur Desktop : absolute bottom-left */}
+      {/* Mobile: Ordre 4 (Tout en bas), Relatif. Desktop: Absolu en bas à gauche */}
       {stats && (
-        <div className="order-3 p-4 md:absolute md:bottom-6 md:left-6 md:z-20 md:p-0 flex justify-center">
+        <div className="order-4 p-4 md:absolute md:bottom-6 md:left-6 md:z-30 md:p-0 flex justify-center z-20 pb-10 md:pb-0">
            <EcoCalculator volumeMm3={stats.volume} dimensions={{ width: stats.width, height: stats.height, depth: stats.depth }} />
         </div>
       )}
 
       {/* --- ZONE 3D --- */}
-      {/* Sur mobile : Hauteur fixe (50vh) ou flex-1. Sur Desktop : Full screen */}
-      <div className="order-1 h-[50vh] md:absolute md:inset-0 md:h-full w-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-800 via-slate-950 to-black z-0">
+      {/* Mobile: Hauteur fixe (50% écran), Ordre 2. Desktop: Plein écran, fond absolu */}
+      <div className={`
+        order-2 md:order-1 
+        h-[50vh] md:h-full md:absolute md:inset-0 
+        w-full 
+        bg-gradient-to-b from-slate-900 via-black to-slate-950 
+        z-0 md:z-0
+      `}>
         {!fileUrl ? (
-          <div className="h-full flex flex-col items-center justify-center p-4">
-             <div className="text-center p-6 bg-slate-900/50 rounded-2xl border border-white/5">
-                <div className="text-4xl mb-2">🛠️</div>
-                <h2 className="text-xl font-bold text-white mb-2">Atelier NIRD</h2>
-                <label className="inline-block bg-green-600 hover:bg-green-500 text-white px-6 py-2 rounded-full cursor-pointer text-sm font-bold shadow-lg shadow-green-900/50">
-                    Ouvrir STL
+          <div className="h-full flex flex-col items-center justify-center p-6 animate-in zoom-in duration-500">
+             <div className="text-center p-6 md:p-10 bg-slate-900/40 backdrop-blur-sm rounded-3xl border border-white/5 shadow-2xl hover:border-green-500/30 transition-all group max-w-md mx-auto">
+                <div className="text-5xl md:text-6xl mb-4 md:mb-6 group-hover:scale-110 transition-transform duration-300 drop-shadow-[0_0_15px_rgba(255,255,255,0.2)]">🛠️</div>
+                <h2 className="text-2xl md:text-3xl font-bold text-white mb-3 tracking-tight font-tech">Atelier NIRD</h2>
+                <p className="text-slate-400 mb-6 md:mb-8 text-xs md:text-sm leading-relaxed">Importez une pièce détachée pour analyser sa réparabilité, son coût et son empreinte écologique.</p>
+                
+                <label className="inline-flex bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-500 hover:to-emerald-500 text-white px-6 py-3 md:px-8 md:py-4 rounded-xl cursor-pointer text-xs md:text-sm font-bold uppercase tracking-widest shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:shadow-[0_0_30px_rgba(34,197,94,0.5)] transition-all transform hover:-translate-y-1">
+                    Importer un fichier STL
                     <input type="file" accept=".stl" onChange={handleFileUpload} className="hidden" />
                 </label>
              </div>
           </div>
         ) : (
           <Canvas shadows dpr={[1, 2]} camera={{ position: [0, 0, 150], fov: 50 }} gl={{ localClippingEnabled: true }}>
-            <Stage environment="city" intensity={0.6} adjustCamera={true}>
+            <fog attach="fog" args={['#000000', 50, 400]} /> 
+            <Stage environment="city" intensity={0.7} adjustCamera={true}>
                <STLModel 
                  url={fileUrl} color={color} materialType={materialType} autoRotate={autoRotate} sliceValue={sliceValue} onLoaded={setStats}
                />

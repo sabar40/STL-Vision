@@ -1,10 +1,20 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google"; // On utilise Inter qui est stable
+import { Inter, Rajdhani } from "next/font/google"; 
 import "./globals.css";
 import { Providers } from "./providers";
 
-// Configuration de la police Inter
-const inter = Inter({ subsets: ["latin"] });
+// Police standard pour le texte (lisible)
+const inter = Inter({ 
+  subsets: ["latin"],
+  variable: "--font-inter"
+});
+
+// Police "Tech/Futuriste" pour les titres et chiffres
+const rajdhani = Rajdhani({ 
+  weight: ['400', '500', '600', '700'],
+  subsets: ["latin"],
+  variable: "--font-rajdhani"
+});
 
 export const metadata: Metadata = {
   title: "NDI Vision 2025",
@@ -14,8 +24,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fr" className="dark">
-      {/* On applique la classe de la police Inter au body */}
-      <body className={inter.className}>
+      <body className={`${inter.variable} ${rajdhani.variable} font-sans antialiased bg-black text-white`}>
         <Providers>{children}</Providers>
       </body>
     </html>

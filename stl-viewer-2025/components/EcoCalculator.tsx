@@ -33,108 +33,117 @@ export default function EcoCalculator({ volumeMm3, dimensions }: EcoCalculatorPr
 
   return (
     <div id="fiche-technique" className="
-      bg-slate-900/90 backdrop-blur-md border border-green-500/30 rounded-xl shadow-2xl 
+      group relative overflow-hidden
+      bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl 
       flex flex-col gap-3 
-      w-full md:w-72 p-4 
+      w-full md:w-64 p-4 
       max-h-[60vh] md:max-h-[85vh] overflow-y-auto scrollbar-hide
-      animate-in slide-in-from-bottom duration-500
+      transition-all duration-300 hover:border-green-500/30
+      animate-in slide-in-from-bottom-10 fade-in duration-700
       print:w-full print:max-h-none print:bg-white print:text-black print:border-black
     ">
       
-      {/* HEADER IMPRESSION */}
+      {/* Lueur supérieure */}
+      <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-green-500/50 to-transparent opacity-50 group-hover:opacity-100 transition-opacity print:hidden" />
+
+      {/* HEADER PRINT (Caché écran) */}
       <div className="hidden print:block border-b-2 border-black mb-4 pb-2">
-          <h1 className="text-xl font-bold uppercase">NIRD Vision 2025</h1>
+          <h1 className="text-2xl font-bold uppercase font-tech">NIRD Vision 2025</h1>
       </div>
 
       {/* HEADER ÉCRAN */}
       <div className="flex items-center justify-between border-b border-white/10 pb-2 print:border-gray-300">
         <div>
-            <h3 className="text-[10px] font-black text-green-400 uppercase tracking-widest print:text-green-700">Fiche Technique</h3>
-            <p className="text-[9px] text-slate-400 print:text-slate-600">Données Utopie3D</p>
+            <h3 className="text-xs font-bold text-green-400 uppercase tracking-widest font-tech print:text-green-700">Analyse NIRD</h3>
+            <p className="text-[9px] text-slate-400 font-medium uppercase print:text-slate-600">Données Utopie3D</p>
         </div>
-        <div className="text-xl">🌱</div>
+        <div className="text-xl animate-pulse">🌱</div>
       </div>
 
-      {/* BLOC DONNÉES COMPACT */}
-      <div className="bg-white/5 p-2 rounded-lg border border-white/10 text-[10px] print:bg-gray-100">
-         <div className="grid grid-cols-2 gap-y-2 gap-x-1">
+      {/* BLOC DONNÉES (Plus compact) */}
+      <div className="bg-black/20 p-2 rounded-lg border border-white/5 text-[10px] print:bg-gray-100">
+         <div className="grid grid-cols-2 gap-y-2 gap-x-2">
             <div className="col-span-2 border-b border-white/5 pb-1 mb-1">
-                <span className="block text-slate-500 uppercase font-bold print:text-black">Dimensions</span>
-                <span className="font-mono text-white text-xs print:text-black">
-                    {dimensions.width.toFixed(0)}x{dimensions.height.toFixed(0)}x{dimensions.depth.toFixed(0)} mm
+                <span className="block text-slate-500 uppercase font-bold text-[9px] tracking-wider print:text-black">Dimensions</span>
+                <span className="font-tech text-white text-sm tracking-wide print:text-black">
+                    {dimensions.width.toFixed(0)} <span className="text-slate-600">x</span> {dimensions.height.toFixed(0)} <span className="text-slate-600">x</span> {dimensions.depth.toFixed(0)} <span className="text-[9px] text-slate-500">mm</span>
                 </span>
             </div>
             <div>
-                <span className="block text-slate-500 uppercase font-bold print:text-black">Volume</span>
-                <span className="font-mono text-white print:text-black">{volumeCm3.toFixed(2)} cm³</span>
+                <span className="block text-slate-500 uppercase font-bold text-[9px] print:text-black">Volume</span>
+                <span className="font-tech text-white text-sm print:text-black">{volumeCm3.toFixed(2)} <span className="text-[9px] text-slate-500">cm³</span></span>
             </div>
             <div className="text-right">
-                <span className="block text-slate-500 uppercase font-bold print:text-black">Poids ({selectedMat})</span>
-                <span className="font-mono text-white print:text-black">{weightGrams.toFixed(1)} g</span>
+                <span className="block text-slate-500 uppercase font-bold text-[9px] print:text-black">Poids</span>
+                <span className="font-tech text-white text-sm print:text-black">{weightGrams.toFixed(1)} <span className="text-[9px] text-slate-500">g</span></span>
             </div>
          </div>
       </div>
 
       {/* SÉLECTEUR MATÉRIAU */}
-      <div className="bg-blue-900/20 p-2 rounded-lg border border-blue-500/30 print:border-gray-300">
-        <label className="block text-[9px] uppercase font-bold text-blue-300 mb-1 print:hidden">Matériau</label>
+      <div className="bg-blue-500/5 p-2 rounded-lg border border-blue-500/20 print:border-gray-300 hover:bg-blue-500/10 transition-colors">
+        <div className="flex justify-between items-center mb-1 print:hidden">
+            <label className="text-[9px] uppercase font-bold text-blue-300 tracking-wider">Matériau</label>
+        </div>
+        
         <select 
             value={selectedMat}
             onChange={(e) => setSelectedMat(e.target.value as MaterialKey)}
-            className="w-full bg-slate-800 text-white text-xs border border-slate-600 rounded p-1 mb-2 outline-none print:hidden"
+            className="w-full bg-slate-900 text-white text-[10px] border border-slate-700 rounded p-1.5 mb-2 outline-none focus:ring-1 focus:ring-blue-500 font-medium print:hidden cursor-pointer hover:border-blue-400"
         >
             {Object.entries(MATERIALS).map(([key, data]) => (
                 <option key={key} value={key}>{data.name}</option>
             ))}
         </select>
         
-        {/* Affichage pour impression */}
-        <div className="hidden print:block text-xs mb-2"><strong>Matériau :</strong> {MATERIALS[selectedMat].name}</div>
+        <div className="hidden print:block text-sm mb-2"><strong>Matériau :</strong> {MATERIALS[selectedMat].name}</div>
 
-        <div className="flex justify-between items-center text-xs">
-            <span className="text-slate-400 print:text-black">Coût est.</span>
-            <span className="font-bold text-blue-300 print:text-black">{printCost.toFixed(2)} €</span>
+        <div className="flex justify-between items-center text-[10px] border-b border-blue-500/10 pb-1 mb-1">
+            <span className="text-slate-400 print:text-black">Coût Fab.</span>
+            <span className="font-tech font-bold text-blue-300 text-sm print:text-black">{printCost.toFixed(2)} €</span>
         </div>
-        <div className="flex justify-between items-center text-xs mt-1">
-            <span className="text-slate-400 print:text-black">Impact CO2</span>
-            <span className="font-bold text-green-400 print:text-black">{carbonFootprint.toFixed(3)} kg</span>
+        <div className="flex justify-between items-center text-[10px]">
+            <span className="text-slate-400 print:text-black">Empreinte CO2</span>
+            <span className="font-tech font-bold text-green-400 text-sm print:text-black">{carbonFootprint.toFixed(3)} kg</span>
         </div>
       </div>
 
-      {/* COMPARATEUR */}
+      {/* COMPARATEUR (Simplifié visuellement) */}
       <div className="bg-white/5 p-2 rounded-lg border border-white/10 print:border-gray-300">
         <div className="flex gap-2 mb-2 print:hidden items-center">
-            <span className="text-[9px] uppercase font-bold text-slate-400 whitespace-nowrap">Prix Neuf :</span>
-            <div className="relative w-full">
+            <span className="text-[9px] uppercase font-bold text-slate-400 whitespace-nowrap tracking-wider">Prix Neuf</span>
+            <div className="relative w-full group/input">
                 <input 
                     type="number" 
-                    placeholder="Ex: 20" 
+                    placeholder="Ex: 50" 
                     value={marketPrice}
                     onChange={(e) => setMarketPrice(e.target.value)}
-                    className="w-full bg-black/50 border border-white/20 rounded px-2 py-1 text-xs text-white"
+                    className="w-full bg-black/40 border border-white/10 rounded px-2 py-1 text-xs text-white focus:outline-none focus:border-green-500 transition-colors font-tech tracking-wide placeholder-slate-600"
                 />
-                <span className="absolute right-2 top-1 text-slate-400 text-xs">€</span>
+                <span className="absolute right-2 top-1 text-slate-500 text-[10px]">€</span>
             </div>
         </div>
 
-        {!isNaN(marketPriceNum) && marketPriceNum > 0 && (
-            <div className="p-2 bg-green-500/10 rounded border border-green-500/30 print:bg-green-100">
+        {!isNaN(marketPriceNum) && marketPriceNum > 0 ? (
+            <div className="p-2 bg-gradient-to-br from-green-500/10 to-emerald-500/5 rounded border border-green-500/30 print:bg-green-100 animate-in zoom-in duration-300">
                 <div className="flex items-center justify-between">
-                    <span className="text-[9px] text-slate-400 uppercase print:text-black">Économie</span>
-                    <span className="bg-green-500/20 text-green-300 text-[10px] px-1 rounded font-bold print:text-green-800">-{savingsPercent}%</span>
+                    <span className="text-[9px] text-green-300/80 uppercase tracking-widest font-bold print:text-black">Économie</span>
+                    <span className="bg-green-500 text-black text-[9px] px-1 rounded font-bold print:text-green-900 font-tech">-{savingsPercent}%</span>
                 </div>
-                <div className="text-xl font-black text-green-400 text-center mt-1 print:text-green-800">
+                <div className="text-lg font-bold text-green-400 text-center print:text-green-800 font-tech mt-1">
                     {savings.toFixed(2)} €
                 </div>
             </div>
+        ) : (
+            <p className="text-[9px] text-slate-500 text-center italic print:hidden">Entrez un prix pour comparer</p>
         )}
       </div>
 
       <button 
         onClick={() => window.print()}
-        className="w-full py-2 bg-white text-black font-bold text-[10px] uppercase tracking-wide rounded hover:bg-slate-200 transition-colors flex justify-center items-center gap-2 print:hidden"
+        className="w-full py-2 bg-white hover:bg-slate-200 text-black font-bold text-[10px] uppercase tracking-widest rounded-lg transition-all transform active:scale-95 flex justify-center items-center gap-2 print:hidden shadow-lg shadow-white/10 mt-1"
       >
-        <span>🖨️</span> Imprimer Fiche
+        <span>🖨️</span> Fiche PDF
       </button>
 
     </div>
